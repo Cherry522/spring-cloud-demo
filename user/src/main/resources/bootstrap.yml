@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: config #获取config-server项目里config目录下的client-dev的环境配置信息，这个指定的是client
+  cloud:
+    config:
+      profile: ${uec.profile:local} #获取config-server项目里config目录下的log-dev的环境配置信息，这个指定的是dev
+      uri: http://${uec.configServer.host:127.0.0.1}:${uec.configServer.port:8888} #指定Config服务的访问地址
+#      profile: @profileActive@ #获取config-server项目里config目录下的log-dev的环境配置信息，这个指定的是dev
+#      uri: http://@confServerHost@:@confServerPort@
+#      enabled: true
+#      discovery:
+#        enabled: true
+#        service-id: CONFIG
+logging:
+  config: classpath:log4j2.xml

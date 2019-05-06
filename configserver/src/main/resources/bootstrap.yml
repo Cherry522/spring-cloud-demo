@@ -1,0 +1,45 @@
+#一般用于定义系统级别的配置，修改比较少
+spring:
+  application:
+    name: configserver #当前项目名
+  profiles:
+    active: native #代表从本地读取配置文件，如果不写，默认是从git上面获取
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: file:///Users/chenyan/IdeaProjects/spring-cloud-demo/conf #所有的客户端的配置文件存放位置
+
+#    config:
+#      server:
+#        git:
+#          uri: https://github.com/spring-cloud-samples/config-repo
+
+#logging:
+#  config: classpath:log4j2.xml
+#logging:
+#  config: log4j2.xml
+#logging:
+#  config: file:///Users/chenyan/Documents/workspace/uec_bio_cloud/uec_config_server/src/main/resources/log4j2.xml
+logging:
+  config: classpath:log4j2.xml
+#
+#spring.cloud.config.server.native.searchLocations
+#spring.profiles.active=native
+
+#本地或者git或者github或者svn上指定位置用：
+#spring.cloud.config.server.git.uri
+#从项目中获取配置用：
+#spring.cloud.config.server.native.search-locations
+
+
+#spring:
+#  cloud:
+#    config:
+#      server:
+#        native:
+#          search-locations: classpath:/config #从所有的客户端的配置文件存放位置
+#  application:
+#    name: config_server #当前项目名
+#  profiles:
+#    active: native #代表从本地读取配置文件，如果不写，默认是从git上面获取

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
+        <!--<version>1.3.5.RELEASE</version>-->
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.cherry.demo</groupId>
+    <artifactId>spring-cloud-demo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>spring-cloud-demo</name>
+    <description>Demo project for Spring Boot</description>
+
+    <modules>
+        <module>configserver</module>
+        <module>eureka-server</module>
+        <module>admin</module>
+        <module>user</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+        <!--<spring-cloud.version>Brixton.RELEASE</spring-cloud.version>-->
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <maven.plugins.version>2.5.1</maven.plugins.version>
+
+        <jersey.version>2.22.2</jersey.version>
+        <fastjson.version>1.2.57</fastjson.version>
+
+        <!-- utils -->
+        <commons-lang3.version>3.9</commons-lang3.version>
+
+        <!-- spring-boot -->
+        <!--   	<spring-boot.version>1.3.5.RELEASE</spring-boot.version> -->
+
+        <!-- mysql -->
+        <mysql-connector-java.version>6.0.2</mysql-connector-java.version>
+
+        <!-- quartz -->
+        <quartz.version>2.2.3</quartz.version>
+
+        <!-- pluging -->
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <maven-war-plugin.version>2.6</maven-war-plugin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!--
+    	dependencyManagement和dependencies的区别：
+    	dependencies即使在子项目中不写该依赖项，那么子项目仍然会从父项目中继承该依赖项（全部继承）
+        dependencyManagement里只是声明依赖，并不实现引入，因此子项目需要显示的声明需要用的依赖。
+        	如果不在子项目中声明依赖，是不会从父项目中继承下来的；
+        	只有在子项目中写了该依赖项，并且没有指定具体版本，才会从父项目中继承该项，并且version和scope都读取自父pom;
+        	另外如果子项目中指定了版本号，那么会使用子项目中指定的jar版本。
+     -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!-- 用于打包spring boot可运行应项目-->
+            <!-- 构建中要声明使用spring-boot-maven-plugin这个插件，它会对Maven打包形成的JAR进行二次修改，最终产生符合我们要求的内容结构。 -->
+            <!--
+                 打包命令
+               mvn clean package spring-boot:repackage
+               只有使用下面的maven命令在cmd窗口启动，热加载才能生效，如果直接Run运行的Application是不支持热加载的
+               mvn clean spring-boot:run
+               这个插件要求项目必须有main方法的存在，如果项目是一个不可执行项目，只是提供一些公共的jar包，那么是不需要该插件的。
+             -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

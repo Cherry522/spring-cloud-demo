@@ -1,0 +1,11 @@
+#该应用的基本配置信息
+server:
+  port: 8888 #本服务启动后的端口号
+#spring:
+#  rabbitmq:
+#    host: @confServerRabbitMQHost@
+#    port: @confServerRabbitMQPort@
+#    username: @confServerRabbitMQUserName@
+#    password: @confServerRabbitMQPassword@
+#    virtual-host: uec
+#    requested-heartbeat: 5 #指定心跳超时，0为不指定，5就表示超过5秒认为没有心跳

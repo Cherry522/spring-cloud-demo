@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+log4j的日志级别：
+我们现在要调用logger的方法，不过在这个Logger对象中，有很多方法，所以要先了解log4j的日志级别，log4j规定了默认的几个级别：trace<debug<info<warn<error<fatal等。这里要说明一下：　　　　
+级别之间是包含的关系，意思是如果你设置日志级别是trace，则大于等于这个级别的日志都会输出。
+基本上默认的级别没多大区别，就是一个默认的设定。你可以通过它的API自己定义级别。你也可以随意调用这些方法，不过你要在配置文件里面好好处理了，否则就起不到日志的作用了，而且也不易读，相当于一个规范，你要完全定义一套也可以，不用没多大必要。从我们实验的结果可以看出，log4j默认的优先级为ERROR或者WARN（实际上是ERROR）　　　　
+这不同的级别的含义大家都很容易理解，这里就简单介绍一下：
+trace： 是追踪，就是程序推进以下，你就可以写个trace输出，所以trace应该会特别多，不过没关系，我们可以设置最低日志级别不让他输出。
+debug： 调试么，我一般就只用这个作为最低级别，trace压根不用。是在没办法就用eclipse或者idea的debug功能就好了么。
+info： 输出一下你感兴趣的或者重要的信息，这个用的最多了。
+warn： 有些信息不是错误信息，但是也要给程序员的一些提示，类似于eclipse中代码的验证不是有error和warn（不算错误但是也请注意，比如以下depressed的方法）。
+error： 错误信息。用的也比较多。
+fatal： 级别比较高了。重大错误，这种级别你可以直接停止程序了，是不应该出现的错误么！不用那么紧张，其实就是一个程度的问题。
+ -->
+<!-- 主要配置为error日志与debug日志分别打印文件 -->
+<configuration status="error">  
+	<!-- 自定义日志属性 -->
+	<properties>  
+		<!-- 日志路径:可以通过参数传递：-Dlog.path.prefix=/Users/chenyan/tmp/log/ -->  
+		<property name="LOG_HOME">${log.path.prefix:/Users/chenyan/tmp/log/}</property>
+		<!-- 日志名称 -->  
+		<property name="LOG_ALL_NAME">uec_config_server.log</property>  
+		<!-- 备份日志名称 -->  
+		<property name="BACKUP_ALL_NAME">uec_config_server-%d{yyyy-MM-dd}-%i.log</property>  
+		<!-- ERROR级别日志名称 -->  
+		<property name="LOG_ERROR_NAME">uec_config_server-error.log</property>  
+		<!-- ERROR级别备份日志名称；如果希望日志被压缩，可以以*.log.gz为后缀名-->  
+		<property name="BACKUP_ERROR_NAME">uec_config_server-error-%d{yyyy-MM-dd}-%i.log</property>  
+	</properties>  
+
+	<!-- 先定义所有的appender -->  
+    <appenders>  
+		<!-- 输出到Console，指定输出格式和过滤器等级为DUBUG -->  
+        <Console name="Console" target="SYSTEM_OUT">  
+			<!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->  
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>  
+			<!-- 输出日志的格式 -->  
+	        <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %class{36} %L %M : %m%n" /> 
+        </Console>  
+
+		<!-- 文件会打印出所有信息-->  
+		<!-- append="true":这个log日志不情况，每次运行程序都在原来的文件上面append;默认值是true -->
+		<!-- append="false":这个log每次运行程序会自动清空,覆盖指定的文件内容，这个也挺有用的，适合临时测试用  -->
+		<!-- append为TRUE表示消息增加到指定文件中，false表示消息覆盖指定的文件内容，默认值是true -->  
+<!--         <File name="testlog" fileName="${LOG_HOME}/test.log" append="false">   -->
+<!--         <File name="TestLog" fileName="/Users/chenyan/tmp/log/test.log" append="false">   -->
+			<!--添加过滤器ThresholdFilter,可以有选择的输出某个级别以上的类别  onMatch="ACCEPT" onMismatch="DENY"意思是匹配就接受,否则直接拒绝  -->  
+<!--             <ThresholdFilter level="DUBUG" onMatch="ACCEPT" onMismatch="DENY"/>   -->
+<!-- 	        <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %m%n" />  -->
+<!--         </File>   -->
+
+<!--         <File name="errorlog" fileName="/Users/chenyan/tmp/log/error.log">   -->
+<!--             <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %m%n"/>   -->
+<!--         </File>   -->
+        
+        <!-- 输出到滚动保存的文件, 触发保存日志文件的条件是日志文件大于2MB，只保存最新的10个日志-->  
+	    <RollingFile name="AllLog" fileName="${LOG_HOME}/${LOG_ALL_NAME}" filePattern="${LOG_HOME}/${BACKUP_ALL_NAME}">  
+<!-- 	    <RollingFile name="infolog" fileName="/Users/chenyan/tmp/log/app.log" filePattern="/Users/chenyan/tmp/log/app-%d{MM-dd-yyyy}-%i.log">   -->
+	        <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>  
+	        <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %class{36} %L %M : %m%n" /> 
+	        <!-- 触发保存日志文件的条件是日志文件大于2MB --> 
+	        <SizeBasedTriggeringPolicy size="2MB" />  <!-- size="2MB" -->
+	        <!-- DefaultRolloverStrategy 中的参数max，可以限制 SizeBasedTriggeringPolicy中size超出后，只保留max个存档-->  
+	        <DefaultRolloverStrategy max="10"/>  
+	    </RollingFile>  
+        
+		<!-- 输出到滚动保存的文件, 触发保存日志文件的条件是日志文件大于2MB，只保存最新的10个日志-->  
+	    <RollingFile name="ErrorLog" fileName="${LOG_HOME}/${LOG_ERROR_NAME}" filePattern="${LOG_HOME}/${BACKUP_ERROR_NAME}">  
+<!-- 	    <RollingFile name="errorlog" fileName="/Users/chenyan/tmp/log/app-error.log" filePattern="/Users/chenyan/tmp/log/app-error-%d{MM-dd-yyyy}-%i.log">   -->
+	        <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>  
+<!-- 	        <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %m%n" />  -->
+	        <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %class{36} %L %M : %m%n" /> 
+	        <!-- 触发保存日志文件的条件是日志文件大于2MB --> 
+	        <SizeBasedTriggeringPolicy size="2MB" />  
+	        <!-- DefaultRolloverStrategy 中的参数max，可以限制 SizeBasedTriggeringPolicy中size超出后，只保留max个存档-->  
+	        <DefaultRolloverStrategy max="10"/>  
+	    </RollingFile>  
+	    
+		<!-- 这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->  
+<!--         <RollingFile name="RollingFile" fileName="logs/web.log"   -->
+<!--                      filePattern="logs/$${date:yyyy-MM}/web-%d{MM-dd-yyyy}-%i.log.gz">   -->
+<!--             <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>   -->
+<!--             <SizeBasedTriggeringPolicy size="2MB"/>   -->
+<!--         </RollingFile>   -->
+    </appenders>  
+
+	<!-- 然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->  
+    <loggers>  
+		<!-- 建立一个默认的root的logger -->  
+        <root level="trace">  
+            <appender-ref ref="Console"/>  
+            <appender-ref ref="AllLog"/>
+            <appender-ref ref="ErrorLog"/>  
+        </root>  
+    </loggers>  
+</configuration>  

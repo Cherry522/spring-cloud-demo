@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>spring-cloud-demo</artifactId>
+        <groupId>com.cherry.demo</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <!--<groupId>com.cherry.demo</groupId>-->
+    <artifactId>configserver</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>configserver</name>
+    <description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <!-- spring cloud的统一服务配置 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-log4j2</artifactId>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.springframework.boot</groupId>-->
+                    <!--<artifactId>spring-boot-starter-logging</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
+        <!-- spring cloud bus,可以将服务端的配置推送到客户端 -->
+        <!-- 		<dependency> -->
+        <!-- 	        <groupId>org.springframework.cloud</groupId> -->
+        <!-- 	        <artifactId>spring-cloud-starter-bus-amqp</artifactId> -->
+        <!-- 	    </dependency> -->
+    </dependencies>
+
+    <build>
+        <!-- 控制项目mvn package打包后的名字，如果不写，默认名字为：uec_config_server-0.0.1-SNAPSHOT.jar -->
+        <!-- 这样配置之后，打包后的项目名为：uec_config_server.jar -->
+        <finalName>uec_config_server</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <!-- 打包时需要特殊处理的文件 -->
+                <directory>src/main/resources</directory>
+                <!-- 需要进行变量替换 -->
+                <filtering>true</filtering>
+                <includes>
+                    <include>bootstrap.yml</include>
+                    <include>application.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <!-- 打包时需要特殊处理的文件 -->
+                <directory>src/main/resources</directory>
+                <!-- 不需要进行变量替换 -->
+                <filtering>false</filtering>
+                <includes>
+                    <include>log4j2.xml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+</project>
