@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.websocket.server.PathParam;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Describe:
@@ -15,8 +17,8 @@ import javax.websocket.server.PathParam;
 @RestController
 public class HelloController {
 
-    @RequestMapping("/hello/{name}")
-    public String hello(@PathVariable("name") String name) {
+    @RequestMapping("/hello")
+    public String hello(@RequestParam("name") String name){
         return "hello "+name+"，this is first messge";
     }
 }

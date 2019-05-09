@@ -3,6 +3,7 @@ package com.cherry.demo.eurekaclientconsumer;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Describe:
@@ -12,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient(name="eureka-client-product")//声明web接口调用的fegin客户端
 public interface HelloRemote {
 
-    @RequestMapping("/hello/{name}")
-    String hello(@PathVariable("name") String name);
+    @RequestMapping("/hello")
+    String hello(@RequestParam("name") String name);
 }

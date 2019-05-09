@@ -3,6 +3,7 @@ package com.cherry.demo.eurekaclientconsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.websocket.server.PathParam;
@@ -18,8 +19,8 @@ public class HelloController {
     @Autowired
     HelloRemote helloRemote;
 
-    @RequestMapping(value = "/hello/{name}")
-    public String hello(@PathVariable("name") String name) {
+    @RequestMapping("/hello")
+    public String hello(@RequestParam("name") String name) {
         return helloRemote.hello(name);
 //        return name;
     }
