@@ -27,3 +27,6 @@ http://localhost:9001/hello?name=chenyan
 
 ## 访问Eureka的服务消费者
 http://localhost:9002/hello?name=chenyan
+
+## 熔断测试
+停掉服务提供者，再访问服务消费者，发现服务会跳转到熔断的服务。
